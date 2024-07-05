@@ -48,6 +48,7 @@ omit = [
     "__init__.py",
     "src/config.py",
     "src/di.py",
+    "src/db.py"
 ]
 
 [tool.coverage.report]

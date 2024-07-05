@@ -1,9 +1,9 @@
 import abc
+from typing import Callable
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from db import get_db
 from domain.models import CalcResult, Operation
 
 
@@ -18,14 +18,17 @@ class AbstractRepository(abc.ABC):
 
 
 class CalcRepository(AbstractRepository):
+    def __init__(self, get_db: Callable):
+        self.get_db = get_db
+
     def add(self, calc_result: CalcResult) -> None:
-        with get_db() as session:
+        with self.get_db() as session:
             session: Session
             session.add(calc_result)
             session.commit()
 
     def get(self, a: int, b: int, op: Operation) -> CalcResult | None:
-        with get_db() as session:
+        with self.get_db() as session:
             session: Session
             statement = select(CalcResult).where(
                 CalcResult.a == a, CalcResult.b == b, CalcResult.op == op
