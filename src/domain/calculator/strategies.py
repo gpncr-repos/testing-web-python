@@ -1,5 +1,7 @@
 import abc
 
+from domain.exceptions import CannotDivideByZeroError
+
 
 class AbstractCalcStrategy(abc.ABC):
     @abc.abstractmethod
@@ -24,4 +26,6 @@ class MulStrategy(AbstractCalcStrategy):
 
 class DivStrategy(AbstractCalcStrategy):
     def calc(self, a: int, b: int) -> int | float:
+        if b == 0:
+            raise CannotDivideByZeroError
         return a / b

@@ -1,5 +1,6 @@
 import pytest
 
+from domain.exceptions import CannotDivideByZeroError
 from domain.models import CalcResult, Operation
 from repositories.calc_repository import AbstractRepository
 from services.calc_service import CalcService
@@ -48,3 +49,8 @@ def test_calc_from_saved_result(service, a, b, operation, expected):
 
     assert result == expected
     assert len(service.repository.data) == 1
+
+
+def test_calc_division_by_zero(service):
+    with pytest.raises(CannotDivideByZeroError):
+        service.calc(1, 0, Operation.DIV)
