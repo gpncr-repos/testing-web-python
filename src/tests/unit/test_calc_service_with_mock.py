@@ -23,21 +23,23 @@ test_params = [
 ]
 
 
+@pytest.mark.asyncio
 @pytest.mark.parametrize("a,b,operation,expected", test_params)
-def test_calc_no_saved_result(service, a, b, operation, expected):
-    result = service.calc(a, b, operation)
+async def test_calc_no_saved_result(service, a, b, operation, expected):
+    result = await service.calc(a, b, operation)
 
     assert result == expected
     assert service.repository.get.call_count == 1
     assert service.repository.add.call_count == 1
 
 
+@pytest.mark.asyncio
 @pytest.mark.parametrize("a,b,operation,expected", test_params)
-def test_calc_from_saved_result(service, a, b, operation, expected):
-    service.calc(a, b, operation)
+async def test_calc_from_saved_result(service, a, b, operation, expected):
+    await service.calc(a, b, operation)
 
     service.repository.get.return_value = CalcResult(a=a, b=b, op=operation, result=expected)
-    result = service.calc(a, b, operation)
+    result = await service.calc(a, b, operation)
 
     assert result == expected
     assert service.repository.get.call_count == 2

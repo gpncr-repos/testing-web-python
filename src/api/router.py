@@ -17,7 +17,7 @@ async def calc(
     calc_service: CalcService = Depends(Provide[Container.calc_service]),
 ) -> int | float:
     try:
-        result = calc_service.calc(calc_request.a, calc_request.b, calc_request.op)
+        result = await calc_service.calc(calc_request.a, calc_request.b, calc_request.op)
     except CannotDivideByZeroError as exc:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=exc.msg)
     return result

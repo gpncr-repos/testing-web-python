@@ -8,12 +8,12 @@ class CalcService:
     def __init__(self, repository: AbstractRepository):
         self.repository = repository
 
-    def calc(self, a: int, b: int, op: Operation) -> int | float:
-        existing = self.repository.get(a, b, op)
+    async def calc(self, a: int, b: int, op: Operation) -> int | float:
+        existing = await self.repository.get(a, b, op)
         if existing:
             return existing.result
         result = self._calc(a, b, op)
-        self.repository.add(CalcResult(a=a, b=b, op=op, result=result))
+        await self.repository.add(CalcResult(a=a, b=b, op=op, result=result))
         return result
 
     def _calc(self, a: int, b: int, op: Operation) -> int | float:

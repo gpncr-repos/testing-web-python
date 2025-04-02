@@ -18,15 +18,17 @@ poetry install
 ```ini
 # src/.env
 
-DB_URL=sqlite:////absolute/path/to/db.sqlite3
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=calculator
+DB_USER=<username>
+DB_PASS=<password>
 ```
-
-Примечание: для тестов рекомендуется использовать отдельную пустую базу данных с примененными миграциями.
 
 ## Активация виртуального окружения
 
 ```shell
-poetry shell
+$(poetry env activate)
 ```
 
 ## Применение миграций

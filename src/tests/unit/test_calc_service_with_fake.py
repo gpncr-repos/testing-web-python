@@ -10,10 +10,10 @@ class FakeCalcRepository(AbstractRepository):
     def __init__(self):
         self.data: list[CalcResult] = []
 
-    def add(self, calc_result: CalcResult) -> None:
+    async def add(self, calc_result: CalcResult) -> None:
         self.data.append(calc_result)
 
-    def get(self, a: int, b: int, op: Operation) -> CalcResult | None:
+    async def get(self, a: int, b: int, op: Operation) -> CalcResult | None:
         for row in self.data:
             if row.a == a and row.b == b and row.op == op:
                 return row
@@ -34,23 +34,26 @@ test_params = [
 ]
 
 
+@pytest.mark.asyncio
 @pytest.mark.parametrize("a,b,operation,expected", test_params)
-def test_calc_no_saved_result(service, a, b, operation, expected):
-    result = service.calc(a, b, operation)
+async def test_calc_no_saved_result(service, a, b, operation, expected):
+    result = await service.calc(a, b, operation)
 
     assert result == expected
     assert len(service.repository.data) == 1
 
 
+@pytest.mark.asyncio
 @pytest.mark.parametrize("a,b,operation,expected", test_params)
-def test_calc_from_saved_result(service, a, b, operation, expected):
-    service.calc(a, b, operation)
-    result = service.calc(a, b, operation)
+async def test_calc_from_saved_result(service, a, b, operation, expected):
+    await service.calc(a, b, operation)
+    result = await service.calc(a, b, operation)
 
     assert result == expected
     assert len(service.repository.data) == 1
 
 
-def test_calc_division_by_zero(service):
+@pytest.mark.asyncio
+async def test_calc_division_by_zero(service):
     with pytest.raises(CannotDivideByZeroError):
-        service.calc(1, 0, Operation.DIV)
+        await service.calc(1, 0, Operation.DIV)
