@@ -33,11 +33,11 @@ jobs:
         poetry install --no-interaction --no-root
     - name: Test with pytest
       env:
-        DB_HOST=test
-        DB_PORT=123
-        DB_NAME=test
-        DB_USER=test
-        DB_PASS=test
+        DB_HOST: test
+        DB_PORT: 123
+        DB_NAME: test
+        DB_USER: test
+        DB_PASS: test
       run: |
         source .venv/bin/activate
         pytest
